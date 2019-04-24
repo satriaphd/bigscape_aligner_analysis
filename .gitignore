@@ -1,0 +1,6 @@
+inputs/*
+!inputs/FILE
+preprocessed/*
+!preprocessed/FILE
+.ipynb_checkpoints
+__pycache__
