@@ -75,7 +75,6 @@ from distutils import dir_util
 from sklearn.cluster import AffinityPropagation
 import networkx as nx
 
-
 global use_relevant_mibig
 global mibig_set
 global genbankDict
@@ -1914,6 +1913,13 @@ def CMD_parser():
                       help="Location of hmmpress-processed Pfam files. Default \
                       is same location of BiG-SCAPE")
     
+    parser.add_argument("--domtable_folder", dest="domtable_folder",
+                      default=None, 
+                      help="")
+        
+    parser.add_argument("--stop_at_alignment", dest="stop_at_alignment", action="store_true", 
+                        default=False, help="")
+
     parser.add_argument("-c", "--cores", dest="cores", default=cpu_count(),
                       help="Set the number of cores the script may use (default:\
                       use all available cores)")
@@ -2219,6 +2225,8 @@ if __name__=="__main__":
     cache_folder = os.path.join(output_folder, "cache")
     bgc_fasta_folder = os.path.join(cache_folder, "fasta")
     domtable_folder = os.path.join(cache_folder, "domtable")
+    if options.domtable_folder:
+        domtable_folder = options.domtable_folder
     pfs_folder = os.path.join(cache_folder, "pfs")
     pfd_folder = os.path.join(cache_folder, "pfd")
     domains_folder = os.path.join(cache_folder, "domains")
@@ -2741,6 +2749,10 @@ if __name__=="__main__":
                        
         else:
             print(str(datetime.now()) + ": " + " No domain fasta files found to align")
+            
+        if (options.stop_at_alignment):            
+            sys.exit(0)
+
     
     
     # If there's something to analyze, load the aligned sequences
@@ -2858,6 +2870,7 @@ if __name__=="__main__":
         cluster_pairs = [(x, y, -1) for (x, y) in pairs]
         pairs.clear()
         network_matrix_mix = generate_network(cluster_pairs, cores)
+        print(str(datetime.now()) + ": " + "  NETWORK_MATRIX_MIX=" + str(sys.getsizeof(network_matrix_mix)) + " bytes")
         
         del cluster_pairs[:]
 
