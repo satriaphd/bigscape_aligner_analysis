@@ -1206,7 +1206,7 @@ def launch_muscle(cores, domain_sequence_list):
     
 def run_muscle(domain_file):
     aligned_file = domain_file.replace(".fasta",".algn")
-    command = ["muscle", "-quiet", "-in", domain_file, "-out", aligned_file]
+    command = ["muscle", "-maxiters", "2", "-quiet", "-in", domain_file, "-out", aligned_file]
     proc_muscle = subprocess.Popen(command, shell=False)
     proc_muscle.wait()
 
